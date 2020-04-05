@@ -1,68 +1,37 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Live version: https://nifty-goldstine-e4ea2b.netlify.com
 
-## Available Scripts
+Test Account:
+- test@test.com
+- test123
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `npm test`
+pytania odnoście projektu:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Elementy takie jak threads i users pobieraja sie z firebase stopniowo przez co funkcja filter oraz useffect 
+odpalaja sie za kadym razem, gdy nowe elementy sie doladuja, przez co nastepuje rerender, i firebase wysyła 
+całą mase zapytań przez to. jakiś inny sposób?
 
-### `npm run build`
+2. W komponentach, które pobierają elementy z firebase takich jak ContentPage i przekazywane do ContentTemplate.js,
+PropTypes dla elementów pobieranych z firebase są najpierw undefined i dopiero po tym zamieniaja sie na propsa z
+wartoscia, dlatego w kazdym potrzbny byl deafultProps, tak powinno byc?
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Zamiast uzywania redux-firebase, nie lepiej byloby reduxa pominac?
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+4. loggedUser wskazuje na usera, który jest zalogowany. Nie lepiej byłoby przekazywać go w MainTemplate w Context API?
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. W   templates/DetailsThread.js   komentarze są w pobierane od DetailsPage WSZYSTKIE NA RAZ, oraz dopiero wtedy filtrowane i wyświetlane tylko te potrzebne do danego threadu -> Jak to wpływa na szybkość aplikacji i jakie są lepsze sposoby?
 
-### `npm run eject`
+6. Jak dodać stories dla elementów z firebase i routerem??
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+7. Dla komponentu atoms/Heading w konsoli pojawia się taki błąd:
+Warning: Received `true` for a non-boolean attribute `boldtext`.
+Pokazuje się gdy przekazuje dla elementu boldtext w ten sposob <Heading boldtext>some text</Heading>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+8. W molecules/ProfileForm przekazywanie obrazka do firestore jest dobrze zrobione?
+Lepiej w firestore trzymac avatary jako pobrany za pomocą .getDownloadURL() juz długi src, czy raczej
+trzymać w snapshot.metadata.fullPath i w aplikacji tam gdzie potrzebne pobierać za pomocą .getDownloadURL()?
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+9. Tagi są trzymane w Sidebar.js, lepiej moze przeniesc je gdzies indziej?
