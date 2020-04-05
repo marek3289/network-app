@@ -1,0 +1,16 @@
+{
+    "extends": ["airbnb", "prettier", "prettier/react"],
+    "rules": {
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "import/no-unresolved": 0,
+        "import/no-extraneous-dependencies": 0,
+        "import/prefer-default-export": 0,
+        "react/jsx-props-no-spreading": 0,
+        "jsx-a11y/label-has-associated-control": 0,
+        "no-extra-boolean-cast": 0
+    },
+	"globals": {
+        "document": true,
+        "window": true
+	},
+}
