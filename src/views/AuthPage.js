@@ -101,7 +101,7 @@ const AuthPage = ({ location, authError, signIn, signUp }) => {
           onChange={handleChange}
           placeholder="Password"
         />
-        <StyledButton>Sign In</StyledButton>
+        <StyledButton>{pageType === 'register' ? 'Sign Up' : 'Sign In'}</StyledButton>
         {authError && <Paragraph>{authError}</Paragraph>}
       </StyledForm>
     </AuthTemplate>
