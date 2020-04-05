@@ -18,7 +18,8 @@ całą mase zapytań przez to. jakiś inny sposób?
 PropTypes dla elementów pobieranych z firebase są najpierw undefined i dopiero po tym zamieniaja sie na propsa z
 wartoscia, dlatego w kazdym potrzbny byl deafultProps, tak powinno byc?
 
-3. Zamiast uzywania redux-firebase, nie lepiej byloby reduxa pominac?
+3. w konsoli pojawia sie cala masa ostrzeżen w stylu: componentWillMount has been renamed, and is not recommended for use.
+nie wiem z czego mogą wynikać
 
 4. loggedUser wskazuje na usera, który jest zalogowany. Nie lepiej byłoby przekazywać go w MainTemplate w Context API?
 
