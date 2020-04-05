@@ -59,7 +59,7 @@ const AuthTemplate = ({ children, pageType }) => {
           <>
             <Paragraph>Already have an account?</Paragraph>
             <StyledLink as={Link} to="/login">
-              {pageType === 'login' ? 'Sign In!' : 'Sign Up!'}
+              Sign In!
             </StyledLink>
           </>
         )}
