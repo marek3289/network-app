@@ -80,7 +80,7 @@ const ProfileForm = ({ updateProfile, setModal, userProfileInfo }) => {
 
   return (
     <>
-      <StyledHeading bold>Edit Profile Info</StyledHeading>
+      <StyledHeading bold="true">Edit Profile Info</StyledHeading>
       <StyledForm autoComplete="off" onSubmit={e => handleSubmit(e)}>
         <FileInput src={inputContent.avatar} handleAction={handleFileChange} />
         <StyledFormWrapper isEdited={isEdited}>

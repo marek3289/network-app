@@ -11,3 +11,9 @@ export const checkIfNew = date => {
   const newMark = Math.round(new Date() / 1000) - 3600;
   return date.seconds >= newMark;
 };
+
+export const autoExpand = elm => {
+  const textarea = elm.target;
+  textarea.style.height = 'auto';
+  textarea.style.height = `${textarea.scrollHeight}px`;
+};

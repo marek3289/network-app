@@ -68,7 +68,7 @@ const Modal = ({ setModal, popout, handleAction, userProfileInfo }) => {
       <StyledModal popout={popout}>
         {popout ? (
           <>
-            <Heading boldtext>
+            <Heading bold="true">
               Are you sure you want to {popouts[popout]}
             </Heading>
             <StyledButtonWrapper>

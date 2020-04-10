@@ -59,11 +59,11 @@ const UserProfileCard = ({ users, userId, loggedUser }) => {
             </Button>
           )}
           <Avatar size="big" src={currentUser.avatarSrc} />
-          <Heading boldtext>{currentUser.username}</Heading>
+          <Heading bold="true">{currentUser.username}</Heading>
           <Heading small>{currentUser.location}</Heading>
           <StyledParagraph light>{currentUser.bio}</StyledParagraph>
           <StyledJoined>
-            <Heading small boldtext>
+            <Heading bold="true" small>
               Account Created:
             </Heading>
             <StyledParagraph>

@@ -9,6 +9,7 @@ import Input from 'components/atoms/Input/Input';
 import Textarea from 'components/atoms/Textarea/Textarea';
 import { connect } from 'react-redux';
 import { addThreadAction } from 'actions';
+import { autoExpand } from 'utils';
 
 const types = {
   forum: 'forum',
@@ -76,6 +77,9 @@ const NewThreadForm = ({ addThread, setModal }) => {
     if (type) {
       setInputContent(initialState);
       setPageType(type);
+    } else if (e.target.name === 'content') {
+      setInputContent({ [e.target.name]: e.target.value });
+      autoExpand(e);
     } else {
       setInputContent({ [e.target.name]: e.target.value });
     }
@@ -95,7 +99,7 @@ const NewThreadForm = ({ addThread, setModal }) => {
 
   return (
     <>
-      <StyledHeading bold>Create new thread</StyledHeading>
+      <StyledHeading bold="true">Create new thread</StyledHeading>
       <StyledForm autoComplete="off" onSubmit={e => handleSubmit(e)}>
         <StyledRadioWrapper>
           <RadioInput

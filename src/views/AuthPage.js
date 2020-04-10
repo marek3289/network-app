@@ -76,7 +76,7 @@ const AuthPage = ({ location, authError, signIn, signUp }) => {
 
   return (
     <AuthTemplate pageType={pageType}>
-      <StyledHeading boldtext>{heading[pageType]}</StyledHeading>
+      <StyledHeading bold="true">{heading[pageType]}</StyledHeading>
       <StyledForm onSubmit={handleSubmit}>
         {pageType === 'register' && (
           <StyledInput
@@ -101,7 +101,9 @@ const AuthPage = ({ location, authError, signIn, signUp }) => {
           onChange={handleChange}
           placeholder="Password"
         />
-        <StyledButton>{pageType === 'register' ? 'Sign Up' : 'Sign In'}</StyledButton>
+        <StyledButton>
+          {pageType === 'register' ? 'Sign Up' : 'Sign In'}
+        </StyledButton>
         {authError && <Paragraph>{authError}</Paragraph>}
       </StyledForm>
     </AuthTemplate>

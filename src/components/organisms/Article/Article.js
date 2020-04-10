@@ -84,7 +84,7 @@ const Article = ({
                   {minSalary} - {maxSalary}$ net/month
                 </Heading>
                 <StyledFlexWrapper>
-                  <Heading big bold>
+                  <Heading bld big>
                     {title}
                   </Heading>
                   <Paragraph light small>
@@ -112,7 +112,7 @@ const Article = ({
                     Delete Thread
                   </Button>
                 )}
-                <Heading big bold>
+                <Heading bold="true" big>
                   {title}
                 </Heading>
                 <StyledFlexWrapper>

@@ -7,6 +7,7 @@ import PlusButton from 'components/atoms/PlusButton/PlusButton';
 import Avatar from 'components/atoms/Avatar/Avatar';
 import Heading from 'components/atoms/Heading/Heading';
 import { addCommentAction } from 'actions';
+import { autoExpand } from 'utils';
 
 const StyledWrapper = styled.form`
   display: flex;
@@ -21,7 +22,10 @@ const StyledWrapper = styled.form`
 const CommentForm = ({ threadId, loggedUser, addComment }) => {
   const [textareaValue, setTextareaValue] = useState('');
 
-  const handleChange = e => setTextareaValue(e.target.value);
+  const handleChange = e => {
+    setTextareaValue(e.target.value);
+    autoExpand(e);
+  };
 
   const handleSubmit = e => {
     e.preventDefault();

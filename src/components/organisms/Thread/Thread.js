@@ -87,7 +87,7 @@ const Thread = ({
             </StyledFlex>
           )}
 
-          <Heading boldtext>{title}</Heading>
+          <Heading bold="true">{title}</Heading>
 
           {pageType === 'jobs' ? (
             <StyledFlex>

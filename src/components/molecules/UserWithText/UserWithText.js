@@ -23,7 +23,7 @@ const UserWithText = ({ name, src, content, data }) => (
     </StyledAvatarWrapper>
     <div>
       <StyledFlexWrapper>
-        <Heading boldtext as={Link} to={`/user/${name}`}>
+        <Heading bold="true" as={Link} to={`/user/${name}`}>
           {name}
         </Heading>
         <Paragraph light small>
@@ -37,9 +37,13 @@ const UserWithText = ({ name, src, content, data }) => (
 
 UserWithText.propTypes = {
   name: PropTypes.string.isRequired,
-  src: PropTypes.string.isRequired,
+  src: PropTypes.string,
   content: PropTypes.string.isRequired,
   data: PropTypes.string.isRequired,
+};
+
+UserWithText.defaultProps = {
+  src: undefined,
 };
 
 export default UserWithText;
