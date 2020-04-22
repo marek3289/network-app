@@ -1,5 +1,5 @@
-import authReducer from 'reducers/authReducer';
-import threadsReducer from 'reducers/threadsReducer';
+import authReducer from 'store/reducers/authReducer';
+import threadsReducer from 'store/reducers/threadsReducer';
 import { combineReducers } from 'redux';
 import { firestoreReducer } from 'redux-firestore';
 import { firebaseReducer } from 'react-redux-firebase';
