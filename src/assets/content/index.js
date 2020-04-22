@@ -1,4 +1,4 @@
-const tags = [
+export const tags = [
     {
       name: 'All',
       isActive: true,
