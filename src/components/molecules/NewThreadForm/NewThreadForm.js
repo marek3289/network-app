@@ -8,7 +8,7 @@ import SelectInput from 'components/atoms/SelectInput/SelectInput';
 import Input from 'components/atoms/Input/Input';
 import Textarea from 'components/atoms/Textarea/Textarea';
 import { connect } from 'react-redux';
-import { addThreadAction } from 'actions';
+import { addThreadAction } from 'store/actions';
 import { autoExpand } from 'utils';
 
 const types = {

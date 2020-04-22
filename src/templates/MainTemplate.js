@@ -6,12 +6,12 @@ import AuthProvider from 'helpers/Auth';
 import GlobalStyle from 'theme/GlobalStyle';
 import { theme } from 'theme/mainTheme';
 import { PageContext } from 'context';
+import { pageTypes } from 'utils';
 
 const MainTemplate = ({ children, location }) => {
   const [pageType, setPageType] = useState('');
 
   useEffect(() => {
-    const pageTypes = ['forum', 'updates', 'jobs', 'login', 'register', 'user'];
     const { pathname } = location;
 
     const [currentPage] = pageTypes.filter(page => pathname.includes(page));

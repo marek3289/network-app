@@ -8,51 +8,46 @@ import CommentInfo from 'components/molecules/CommentInfo/CommentInfo';
 
 const ThreadTemplate = ({
   pageType,
-  comments,
   threadId,
+  comments,
   loggedUser,
-  ...props
-}) => {
-  const threadComments = comments.filter(
-    comment => comment.threadId.toString() === threadId.toString(),
-  );
-
-  return (
-    <ContentTemplate>
-      <Article
-        pageType={pageType}
-        threadId={threadId}
+  activeThread,
+}) => (
+  <ContentTemplate>
+    <Article
+      pageType={pageType}
+      threadId={threadId}
+      loggedUser={loggedUser}
+      activeThread={activeThread}
+    />
+    <CommentForm threadId={threadId} loggedUser={loggedUser} />
+    <CommentInfo comments={comments} />
+    {comments.map(({ id, authorId, createdAt, content }) => (
+      <Comment
+        key={id}
+        id={id}
+        authorId={authorId}
+        createdAt={createdAt}
+        content={content}
         loggedUser={loggedUser}
-        {...props}
       />
-      <CommentForm threadId={threadId} loggedUser={loggedUser} />
-      <CommentInfo comments={threadComments} />
-      {threadComments &&
-        threadComments.map(comment => (
-          <Comment
-            key={comment.id}
-            id={comment.id}
-            authorId={comment.authorId}
-            createdAt={comment.createdAt}
-            content={comment.content}
-            loggedUser={loggedUser}
-          />
-        ))}
-    </ContentTemplate>
-  );
-};
+    ))}
+  </ContentTemplate>
+);
 
 ThreadTemplate.propTypes = {
   pageType: PropTypes.string.isRequired,
-  comments: PropTypes.arrayOf(PropTypes.object),
   threadId: PropTypes.string.isRequired,
+  comments: PropTypes.arrayOf(PropTypes.object),
+  activeThread: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+    .isRequired,
   loggedUser: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.bool]),
   ).isRequired,
 };
 
 ThreadTemplate.defaultProps = {
-  comments: null,
+  comments: [],
 };
 
 export default ThreadTemplate;

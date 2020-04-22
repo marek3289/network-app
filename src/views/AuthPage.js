@@ -10,7 +10,7 @@ import Button from 'components/atoms/Button/Button';
 import Heading from 'components/atoms/Heading/Heading';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import { PageContext } from 'context';
-import { signInAction, signUpAction } from 'actions';
+import { signInAction, signUpAction } from 'store/actions';
 
 const heading = {
   login: 'Sign in to Network',

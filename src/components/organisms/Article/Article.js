@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { removeElementAction } from 'store/actions';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
 import Modal from 'components/organisms/Modal/Modal';
 import UserWithText from 'components/molecules/UserWithText/UserWithText';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Heading from 'components/atoms/Heading/Heading';
 import Box from 'components/atoms/Box/Box';
-import { connect } from 'react-redux';
-import { removeElementAction } from 'actions';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
-import moment from 'moment';
 import Button from 'components/atoms/Button/Button';
+import moment from 'moment';
 
 const StyledWrapper = styled(Box)`
   position: relative;
@@ -39,23 +39,28 @@ const StyledFlexWrapper = styled.div`
 `;
 
 const Article = ({
-  pageType,
   users,
-  loggedUser,
-  authorId,
-  threadId,
-  title,
-  content,
-  tags,
-  createdAt,
-  company,
-  city,
-  minSalary,
-  maxSalary,
   removeElement,
+  pageType,
+  loggedUser,
+  threadId,
+  activeThread,
 }) => {
   const [redirect, setRedirect] = useState(false);
   const [isModalOpen, setModal] = useState(false);
+
+  const {
+    title,
+    content,
+    tags,
+    createdAt,
+    company,
+    city,
+    minSalary,
+    maxSalary,
+    authorId,
+  } = activeThread;
+
   const data = moment(createdAt.toDate()).calendar();
   const author = users && users[authorId];
 
@@ -141,32 +146,46 @@ const Article = ({
 };
 
 Article.propTypes = {
-  pageType: PropTypes.string.isRequired,
-  removeElement: PropTypes.func.isRequired,
-  threadId: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-  createdAt: PropTypes.objectOf(PropTypes.number).isRequired,
-  company: PropTypes.string,
-  city: PropTypes.string,
-  minSalary: PropTypes.string,
-  maxSalary: PropTypes.string,
   users: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  removeElement: PropTypes.func.isRequired,
+  pageType: PropTypes.string.isRequired,
+  threadId: PropTypes.string.isRequired,
   loggedUser: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object,
     PropTypes.bool,
   ]).isRequired,
-  authorId: PropTypes.string.isRequired,
+  activeThread: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    createdAt: PropTypes.objectOf(PropTypes.number).isRequired,
+    company: PropTypes.string,
+    city: PropTypes.string,
+    minSalary: PropTypes.string,
+    maxSalary: PropTypes.string,
+    authorId: PropTypes.string.isRequired,
+  }),
 };
 
 Article.defaultProps = {
   users: null,
-  company: '',
-  city: '',
-  minSalary: '',
-  maxSalary: '',
+  activeThread: PropTypes.shape({
+    company: '',
+    city: '',
+    minSalary: '',
+    maxSalary: '',
+  }),
+};
+
+Article.defaultProps = {
+  users: null,
+  activeThread: PropTypes.shape({
+    company: '',
+    city: '',
+    minSalary: '',
+    maxSalary: '',
+  }),
 };
 
 const mapStateToProps = state => ({ users: state.firestore.data.users });

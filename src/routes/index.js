@@ -5,14 +5,14 @@ export const routes = {
   user: '/user/:id',
 
   forum: '/forum',
-  forumPage: '/forum/:page',
+  forumPage: '/forum/page/:page',
   forumThread: '/forum/:id',
 
   updates: '/updates',
-  updatesPage: '/updates/:page',
+  updatesPage: '/updates/page/:page',
   update: '/updates/:id',
 
   jobs: '/jobs',
-  jobsPage: '/jobs/:page',
+  jobsPage: '/jobs/page/:page',
   job: '/jobs/:id',
 };

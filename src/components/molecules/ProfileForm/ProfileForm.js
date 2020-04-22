@@ -7,7 +7,7 @@ import Heading from 'components/atoms/Heading/Heading';
 import Button from 'components/atoms/Button/Button';
 import Input from 'components/atoms/Input/Input';
 import Textarea from 'components/atoms/Textarea/Textarea';
-import { updateProfileAction } from 'actions';
+import { updateProfileAction } from 'store/actions';
 import firebase from 'fbConfig';
 
 const StyledForm = styled.form`

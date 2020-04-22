@@ -7,7 +7,6 @@ import Sidebar from 'components/organisms/Sidebar/Sidebar';
 import Header from 'components/organisms/Header/Header';
 import { PageContext } from 'context';
 import UserProfileCard from 'components/organisms/UserProfileCard/UserProfileCard';
-import Thread from 'components/organisms/Thread/Thread';
 
 const StyledWrapper = styled.main`
   padding: 0 75px;
@@ -30,50 +29,30 @@ const StyledThreads = styled.div`
   margin-right: 20px;
 `;
 
-const ContentTemplate = ({
-  children,
-  match,
-  userThreads,
-  loggedUser,
-  userId,
-}) => {
+const ContentTemplate = ({ children, match, loggedUser, userId }) => {
   const pageType = useContext(PageContext);
   const [searchValue, setSearchValue] = useState('');
   const [activeTag, setActiveTag] = useState('All');
-  const isThreadPage = match.path.includes(':id');
+  const isThreadsPage = match.path.includes(':id');
 
   const handleSearch = e => setSearchValue(e.target.value);
 
   return (
     <UserPageTemplate>
       <Header
-        isThreadPage={isThreadPage}
+        isThreadPage={isThreadsPage}
         pageType={pageType}
         searchValue={searchValue}
         handleSearch={handleSearch}
       />
       <StyledWrapper>
+        <StyledThreads>
+          {isThreadsPage ? children : children([searchValue, activeTag])}
+        </StyledThreads>
         {pageType === 'user' ? (
-          <>
-            <StyledThreads>
-              {userThreads &&
-                userThreads.map(thread => (
-                  <Thread
-                    key={thread.id}
-                    pageType={thread.itemType}
-                    {...thread}
-                  />
-                ))}
-            </StyledThreads>
-            <UserProfileCard userId={userId} loggedUser={loggedUser} />
-          </>
+          <UserProfileCard userId={userId} loggedUser={loggedUser} />
         ) : (
-          <>
-            <StyledThreads>
-              {isThreadPage ? children : children([searchValue, activeTag])}
-            </StyledThreads>
-            <Sidebar activeTag={activeTag} setActiveTag={setActiveTag} />
-          </>
+          <Sidebar activeTag={activeTag} setActiveTag={setActiveTag} />
         )}
       </StyledWrapper>
     </UserPageTemplate>
@@ -85,13 +64,11 @@ ContentTemplate.propTypes = {
     path: PropTypes.string,
   }).isRequired,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.array]),
-  userThreads: PropTypes.arrayOf(PropTypes.object),
   loggedUser: PropTypes.string,
   userId: PropTypes.string,
 };
 
 ContentTemplate.defaultProps = {
-  userThreads: undefined,
   children: null,
   loggedUser: null,
   userId: null,

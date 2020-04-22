@@ -6,7 +6,7 @@ import Textarea from 'components/atoms/Textarea/Textarea';
 import PlusButton from 'components/atoms/PlusButton/PlusButton';
 import Avatar from 'components/atoms/Avatar/Avatar';
 import Heading from 'components/atoms/Heading/Heading';
-import { addCommentAction } from 'actions';
+import { addCommentAction } from 'store/actions';
 import { autoExpand } from 'utils';
 
 const StyledWrapper = styled.form`

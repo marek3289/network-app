@@ -10,12 +10,13 @@ const StyledHeading = styled.div`
 
 const CommentInfo = ({ comments }) => (
   <>
-    <Heading>{comments === 0 ? comments : comments.length} comments</Heading>
-    <StyledHeading height={comments}>
-      {comments.length === 0 && (
+    {!comments.length ? (
+      <StyledHeading height={comments}>
         <Heading bold="true">Be the first one to write a comment</Heading>
-      )}
-    </StyledHeading>
+      </StyledHeading>
+    ) : (
+      <Heading>{comments.length} comments</Heading>
+    )}
   </>
 );
 
@@ -24,7 +25,7 @@ CommentInfo.propTypes = {
 };
 
 CommentInfo.defaultProps = {
-  comments: 0,
+  comments: [],
 };
 
 export default CommentInfo;

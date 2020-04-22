@@ -7,7 +7,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import UserWithText from 'components/molecules/UserWithText/UserWithText';
 import Box from 'components/atoms/Box/Box';
 import Button from 'components/atoms/Button/Button';
-import { removeElementAction } from 'actions';
+import { removeElementAction } from 'store/actions';
 import moment from 'moment';
 
 const StyledWrapper = styled(Box)`
@@ -16,17 +16,18 @@ const StyledWrapper = styled(Box)`
 `;
 
 const Comment = ({
-  id,
   users,
-  authorId,
-  loggedUser,
   removeElement,
-  content,
+  id,
+  authorId,
   createdAt,
+  content,
+  loggedUser,
 }) => {
+  const author = users && users[authorId];
+
   const handleDelete = () => removeElement('comments', id);
   const data = moment(createdAt.toDate()).calendar();
-  const author = users && users[authorId];
 
   return (
     <>
@@ -34,7 +35,7 @@ const Comment = ({
         <StyledWrapper>
           {author.username === loggedUser.username && (
             <Button secondary onClick={handleDelete}>
-              delete comment
+              delete
             </Button>
           )}
           <UserWithText
@@ -62,7 +63,9 @@ Comment.propTypes = {
     PropTypes.bool,
   ]).isRequired,
 };
+
 const mapStateToProps = state => ({ users: state.firestore.data.users });
+
 const mapDispatchToProps = dispatch => ({
   removeElement: (type, id) => dispatch(removeElementAction(type, id)),
 });

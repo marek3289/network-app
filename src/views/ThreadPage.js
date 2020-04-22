@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -6,19 +6,35 @@ import { firestoreConnect } from 'react-redux-firebase';
 import ThreadTemplate from 'templates/ThreadTemplate';
 import { PageContext } from 'context';
 
-const ThreadPage = ({ activeItem, comments, match, loggedUser }) => {
+const ThreadPage = ({ thread, comments, match, loggedUser }) => {
+  const [activeThread, setActiveThread] = useState(null);
+  const [threadComments, setThreadComments] = useState(null);
+
   const pageType = useContext(PageContext);
   const threadId = match.params.id;
 
+  useEffect(() => {
+    if (comments) {
+      const filteredComments = comments.filter(
+        comment => comment.threadId.toString() === threadId.toString(),
+      );
+      setThreadComments(filteredComments);
+    }
+  }, [comments]);
+
+  useEffect(() => {
+    if (thread) setActiveThread(thread);
+  }, [threadId, pageType]);
+
   return (
     <>
-      {activeItem && comments && (
+      {activeThread && comments && (
         <ThreadTemplate
           pageType={pageType}
           threadId={threadId}
-          comments={comments}
+          comments={threadComments}
           loggedUser={loggedUser}
-          {...activeItem}
+          activeThread={activeThread}
         />
       )}
     </>
@@ -26,7 +42,7 @@ const ThreadPage = ({ activeItem, comments, match, loggedUser }) => {
 };
 
 ThreadPage.propTypes = {
-  activeItem: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  thread: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   comments: PropTypes.arrayOf(PropTypes.object),
   match: PropTypes.shape({
     params: PropTypes.object,
@@ -39,7 +55,7 @@ ThreadPage.propTypes = {
 };
 
 ThreadPage.defaultProps = {
-  activeItem: null,
+  thread: null,
   comments: [],
 };
 
@@ -49,7 +65,7 @@ const mapStateToProps = (state, ownProps) => {
   const thread = threads ? threads[id] : null;
 
   return {
-    activeItem: thread,
+    thread,
     comments: state.firestore.ordered.comments,
     loggedUser: state.firebase.profile,
   };
@@ -58,5 +74,8 @@ const mapStateToProps = (state, ownProps) => {
 export default compose(
   connect(mapStateToProps),
   firestoreConnect([{ collection: 'threads' }]),
-  firestoreConnect([{ collection: 'comments' }]),
+  firestoreConnect([
+    { collection: 'comments', orderBy: ['createdAt', 'desc'] },
+  ]),
+  firestoreConnect([{ collection: 'users' }]),
 )(ThreadPage);

@@ -5,7 +5,7 @@ import Modal from 'components/organisms/Modal/Modal';
 import Tag from 'components/molecules/Tag/Tag';
 import Button from 'components/atoms/Button/Button';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
-import { tags } from 'assets/content';
+import { tags } from 'utils';
 
 const StyledWrapper = styled.aside`
   width: 250px;

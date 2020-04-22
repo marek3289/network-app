@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Modal from 'components/organisms/Modal/Modal';
 import Heading from 'components/atoms/Heading/Heading';
 import Input from 'components/atoms/Input/Input';
-import { signOutAction } from 'actions';
+import { signOutAction } from 'store/actions';
 import { capitalize } from 'utils';
 
 const StyledWrapper = styled.header`
