@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Navigation from 'components/molecules/Navigation/Navigation';
 import Heading from 'components/atoms/Heading/Heading';
@@ -57,27 +56,21 @@ const StyledUserProfile = styled.div`
   }
 `;
 
-const NavHeader = ({ profile }) => (
-  <StyledWrapper>
-    <StyledLogo as={Link} to="/">
-      Network
-    </StyledLogo>
-    <Navigation />
-    <StyledUserProfile as={Link} to={`/user/${profile.username}`}>
-      <Avatar src={profile.avatarSrc} />
-      <StyledHeading>{profile.username}</StyledHeading>
-    </StyledUserProfile>
-  </StyledWrapper>
-);
+const NavHeader = () => {
+  const { username, avatarSrc } = useSelector(state => state.firebase.profile);
 
-NavHeader.propTypes = {
-  profile: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.bool,
-  ]).isRequired,
+  return (
+    <StyledWrapper>
+      <StyledLogo as={Link} to="/">
+        Network
+      </StyledLogo>
+      <Navigation />
+      <StyledUserProfile as={Link} to={`/user/${username}`}>
+        <Avatar src={avatarSrc} />
+        <StyledHeading>{username}</StyledHeading>
+      </StyledUserProfile>
+    </StyledWrapper>
+  );
 };
 
-const mapStateToProps = state => ({ profile: state.firebase.profile });
-
-export default connect(mapStateToProps)(NavHeader);
+export default NavHeader;

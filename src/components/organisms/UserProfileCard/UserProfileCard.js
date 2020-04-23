@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
 import Modal from 'components/organisms/Modal/Modal';
 import Box from 'components/atoms/Box/Box';
 import Avatar from 'components/atoms/Avatar/Avatar';
@@ -45,8 +43,9 @@ const StyledJoined = styled.div`
   align-items: center;
 `;
 
-const UserProfileCard = ({ users, userId, loggedUser }) => {
+const UserProfileCard = ({ userId, loggedUser }) => {
   const [isModalOpen, setModal] = useState(false);
+  const users = useSelector(state => state.firestore.ordered.users);
   const currentUser = users && users.find(user => user.username === userId);
 
   return (
@@ -80,22 +79,13 @@ const UserProfileCard = ({ users, userId, loggedUser }) => {
 };
 
 UserProfileCard.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.object),
   userId: PropTypes.string,
   loggedUser: PropTypes.string,
 };
 
 UserProfileCard.defaultProps = {
-  users: null,
   userId: null,
   loggedUser: null,
 };
 
-const mapStateToProps = state => {
-  return { users: state.firestore.ordered.users };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect([{ collection: 'users' }]),
-)(UserProfileCard);
+export default UserProfileCard;

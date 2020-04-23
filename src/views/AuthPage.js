@@ -1,16 +1,15 @@
-import React, { useReducer, useContext } from 'react';
+import React, { useReducer, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { AuthContext } from 'helpers/Auth';
 import AuthTemplate from 'templates/AuthTemplate';
 import Input from 'components/atoms/Input/Input';
 import Button from 'components/atoms/Button/Button';
 import Heading from 'components/atoms/Heading/Heading';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import { PageContext } from 'context';
-import { signInAction, signUpAction } from 'store/actions';
+import { signInAction, signUpAction } from 'store/actions/authActions';
 
 const heading = {
   login: 'Sign in to Network',
@@ -43,8 +42,18 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const AuthPage = ({ location, authError, signIn, signUp }) => {
-  const { currentUser } = useContext(AuthContext);
+const AuthPage = ({ location }) => {
+  const auth = useSelector(state => state.firebase.auth);
+  const authError = useSelector(state => state.auth.authError);
+
+  const dispatch = useDispatch();
+  const signIn = useCallback(creds => dispatch(signInAction(creds)), [
+    dispatch,
+  ]);
+  const signUp = useCallback(newUser => dispatch(signUpAction(newUser)), [
+    dispatch,
+  ]);
+
   const pageType = useContext(PageContext);
   const { from } = location.state || { from: { pathname: '/' } };
 
@@ -70,7 +79,7 @@ const AuthPage = ({ location, authError, signIn, signUp }) => {
     }
   };
 
-  if (currentUser) {
+  if (auth.uid) {
     return <Redirect to={from} />;
   }
 
@@ -114,23 +123,10 @@ AuthPage.propTypes = {
   location: PropTypes.shape({
     state: PropTypes.object,
   }),
-  authError: PropTypes.string,
-  signIn: PropTypes.func.isRequired,
-  signUp: PropTypes.func.isRequired,
 };
 
 AuthPage.defaultProps = {
   location: undefined,
-  authError: null,
 };
 
-const mapStateToProps = state => ({ authError: state.auth.authError });
-
-const mapDispatchToProps = dispatch => {
-  return {
-    signIn: creds => dispatch(signInAction(creds)),
-    signUp: newUser => dispatch(signUpAction(newUser)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AuthPage);
+export default AuthPage;

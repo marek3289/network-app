@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import moment from 'moment';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Heading from 'components/atoms/Heading/Heading';
@@ -51,7 +50,6 @@ const StyledUsername = styled(Paragraph)`
 const Thread = ({
   pageType,
   id,
-  users,
   authorId,
   createdAt,
   tags,
@@ -61,6 +59,9 @@ const Thread = ({
   minSalary,
   maxSalary,
 }) => {
+  useFirestoreConnect('users');
+  const users = useSelector(state => state.firestore.data.users);
+
   const data = moment(createdAt.toDate()).calendar();
   const isNew = checkIfNew(createdAt);
   const author = users && users[authorId];
@@ -120,7 +121,6 @@ Thread.propTypes = {
   createdAt: PropTypes.objectOf(PropTypes.number).isRequired,
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
-  users: PropTypes.objectOf(PropTypes.object),
   company: PropTypes.string,
   city: PropTypes.string,
   minSalary: PropTypes.string,
@@ -128,20 +128,10 @@ Thread.propTypes = {
 };
 
 Thread.defaultProps = {
-  users: null,
   company: null,
   city: null,
   minSalary: null,
   maxSalary: null,
 };
 
-const mapStateToProps = state => {
-  return {
-    users: state.firestore.data.users,
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect([{ collection: 'users' }]),
-)(Thread);
+export default Thread;

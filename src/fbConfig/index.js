@@ -3,7 +3,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
 
-const firebaseConfig = {
+const fbConfig = {
   apiKey: 'AIzaSyDHV3CPGpfcnxqCPakbLsFpGqJgyha9pgs',
   authDomain: 'network-app-86145.firebaseapp.com',
   databaseURL: 'https://network-app-86145.firebaseio.com',
@@ -14,6 +14,6 @@ const firebaseConfig = {
   measurementId: 'G-M15Y7KFRFC',
 };
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(fbConfig);
 
 export default firebase;

@@ -1,13 +1,13 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import FileInput from 'components/molecules/FileInput/FileInput';
 import Heading from 'components/atoms/Heading/Heading';
 import Button from 'components/atoms/Button/Button';
 import Input from 'components/atoms/Input/Input';
 import Textarea from 'components/atoms/Textarea/Textarea';
-import { updateProfileAction } from 'store/actions';
+import { updateProfileAction } from 'store/actions/authActions';
 import firebase from 'fbConfig';
 
 const StyledForm = styled.form`
@@ -39,7 +39,13 @@ const StyledButton = styled(Button)`
   transform: translateX(-50%);
 `;
 
-const ProfileForm = ({ updateProfile, setModal, userProfileInfo }) => {
+const ProfileForm = ({ setModal, userProfileInfo }) => {
+  const dispatch = useDispatch();
+  const updateProfile = useCallback(
+    (userId, UserInfo) => dispatch(updateProfileAction(userId, UserInfo)),
+    [dispatch],
+  );
+
   const [isEdited, setIsEdited] = useState(false);
   const initialState = {
     avatar: userProfileInfo.avatarSrc,
@@ -106,7 +112,6 @@ const ProfileForm = ({ updateProfile, setModal, userProfileInfo }) => {
 };
 
 ProfileForm.propTypes = {
-  updateProfile: PropTypes.func.isRequired,
   setModal: PropTypes.func.isRequired,
   userProfileInfo: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -118,9 +123,4 @@ ProfileForm.propTypes = {
   }).isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  updateProfile: (userId, UserInfo) =>
-    dispatch(updateProfileAction(userId, UserInfo)),
-});
-
-export default connect(null, mapDispatchToProps)(ProfileForm);
+export default ProfileForm;

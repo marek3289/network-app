@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import ContentTemplate from 'templates/ContentTemplate';
 import Thread from 'components/organisms/Thread/Thread';
 import Loader from 'components/atoms/Loader/Loader';
@@ -14,7 +13,13 @@ const StyledHeading = styled.div`
   justify-content: center;
 `;
 
-const UserProfilePage = ({ match, loggedUser, threads }) => {
+const UserProfilePage = ({ match }) => {
+  useFirestoreConnect([
+    { collection: 'threads', limit: 5, orderBy: ['createdAt', 'desc'] },
+  ]);
+  const loggedUser = useSelector(state => state.firebase.profile.username);
+  const threads = useSelector(state => state.firestore.ordered.threads);
+
   const { id } = match.params;
   const [isLoading, setLoading] = useState(true);
   const [threadList, setThreadList] = useState([]);
@@ -25,13 +30,13 @@ const UserProfilePage = ({ match, loggedUser, threads }) => {
       setLoading(false);
       setThreadList(userThreads);
     }
-  }, [threads]);
+  }, [threads, id]);
 
   return (
     <ContentTemplate userId={id} loggedUser={loggedUser}>
       {!threadList.length && !isLoading ? (
         <StyledHeading>
-          <Heading bold="true">This user has no posts yet.</Heading>
+          <Heading bold>This user has no posts yet.</Heading>
         </StyledHeading>
       ) : (
         threadList.map(thread => (
@@ -49,26 +54,10 @@ UserProfilePage.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   }),
-  loggedUser: PropTypes.string,
-  threads: PropTypes.arrayOf(PropTypes.object),
 };
 
 UserProfilePage.defaultProps = {
   match: undefined,
-  loggedUser: undefined,
-  threads: null,
 };
 
-const mapStateToProps = state => {
-  return {
-    loggedUser: state.firebase.profile.username,
-    threads: state.firestore.ordered.threads,
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect([
-    { collection: 'threads', limit: 5, orderBy: ['createdAt', 'desc'] },
-  ]),
-)(UserProfilePage);
+export default UserProfilePage;

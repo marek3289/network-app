@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useCallback, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Heading from 'components/atoms/Heading/Heading';
@@ -7,8 +7,8 @@ import RadioInput from 'components/atoms/RadioInput/RadioInput';
 import SelectInput from 'components/atoms/SelectInput/SelectInput';
 import Input from 'components/atoms/Input/Input';
 import Textarea from 'components/atoms/Textarea/Textarea';
-import { connect } from 'react-redux';
-import { addThreadAction } from 'store/actions';
+import { useDispatch } from 'react-redux';
+import { addThreadAction } from 'store/actions/threadsActions';
 import { autoExpand } from 'utils';
 
 const types = {
@@ -54,7 +54,13 @@ const StyledButton = styled(Button)`
   transform: translateX(-50%);
 `;
 
-const NewThreadForm = ({ addThread, setModal }) => {
+const NewThreadForm = ({ setModal }) => {
+  const dispatch = useDispatch();
+  const addThread = useCallback(
+    (itemType, content) => dispatch(addThreadAction(itemType, content)),
+    [dispatch],
+  );
+
   const [pageType, setPageType] = useState(types.forum);
   const [selectedTags, setselectedTags] = useState([]);
 
@@ -199,12 +205,6 @@ const NewThreadForm = ({ addThread, setModal }) => {
 
 NewThreadForm.propTypes = {
   setModal: PropTypes.func.isRequired,
-  addThread: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  addThread: (itemType, content) =>
-    dispatch(addThreadAction(itemType, content)),
-});
-
-export default connect(null, mapDispatchToProps)(NewThreadForm);
+export default NewThreadForm;

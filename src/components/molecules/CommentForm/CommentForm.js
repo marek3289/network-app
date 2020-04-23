@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Textarea from 'components/atoms/Textarea/Textarea';
 import PlusButton from 'components/atoms/PlusButton/PlusButton';
 import Avatar from 'components/atoms/Avatar/Avatar';
 import Heading from 'components/atoms/Heading/Heading';
-import { addCommentAction } from 'store/actions';
+import { addCommentAction } from 'store/actions/threadsActions';
 import { autoExpand } from 'utils';
 
 const StyledWrapper = styled.form`
@@ -19,7 +19,15 @@ const StyledWrapper = styled.form`
   }
 `;
 
-const CommentForm = ({ threadId, loggedUser, addComment }) => {
+const CommentForm = ({ threadId, loggedUser }) => {
+  const dispatch = useDispatch();
+  const addComment = useCallback(
+    (itemType, id, content) => {
+      dispatch(addCommentAction(itemType, id, content));
+    },
+    [dispatch],
+  );
+
   const [textareaValue, setTextareaValue] = useState('');
 
   const handleChange = e => {
@@ -55,12 +63,6 @@ CommentForm.propTypes = {
   loggedUser: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.bool]),
   ).isRequired,
-  addComment: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  addComment: (itemType, threadId, content) =>
-    dispatch(addCommentAction(itemType, threadId, content)),
-});
-
-export default connect(null, mapDispatchToProps)(CommentForm);
+export default CommentForm;

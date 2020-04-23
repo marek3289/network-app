@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import ContentTemplate from 'templates/ContentTemplate';
 import Thread from 'components/organisms/Thread/Thread';
 import Loader from 'components/atoms/Loader/Loader';
@@ -16,7 +14,12 @@ const StyledHeading = styled.div`
   justify-content: center;
 `;
 
-const ContentPage = ({ threads }) => {
+const ContentPage = () => {
+  useFirestoreConnect([
+    { collection: 'threads', orderBy: ['createdAt', 'desc'] },
+  ]);
+  const threads = useSelector(state => state.firestore.ordered.threads);
+
   const [isLoading, setLoading] = useState(true);
   const [threadList, setThreadList] = useState([]);
   const pageType = useContext(PageContext);
@@ -35,7 +38,7 @@ const ContentPage = ({ threads }) => {
         <>
           {!threadList.length && !isLoading ? (
             <StyledHeading>
-              <Heading bold="true">Sorry, there is no posts yet</Heading>
+              <Heading bold>Sorry, there is no posts yet</Heading>
             </StyledHeading>
           ) : (
             filterItems(threadList, searchValue, activeTag).map(thread => (
@@ -49,17 +52,4 @@ const ContentPage = ({ threads }) => {
   );
 };
 
-ContentPage.propTypes = {
-  threads: PropTypes.arrayOf(PropTypes.object),
-};
-
-ContentPage.defaultProps = {
-  threads: null,
-};
-
-const mapStateToProps = state => ({ threads: state.firestore.ordered.threads });
-
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect([{ collection: 'threads', orderBy: ['createdAt', 'desc'] }]),
-)(ContentPage);
+export default ContentPage;

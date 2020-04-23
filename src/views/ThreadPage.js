@@ -1,17 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import ThreadTemplate from 'templates/ThreadTemplate';
 import { PageContext } from 'context';
 
-const ThreadPage = ({ thread, comments, match, loggedUser }) => {
-  const [activeThread, setActiveThread] = useState(null);
-  const [threadComments, setThreadComments] = useState(null);
-
+const ThreadPage = ({ match }) => {
   const pageType = useContext(PageContext);
   const threadId = match.params.id;
+
+  useFirestoreConnect([
+    { collection: 'threads', where: ['id', '==', threadId] },
+  ]);
+  useFirestoreConnect([
+    { collection: 'comments', orderBy: ['createdAt', 'desc'] },
+  ]);
+
+  const comments = useSelector(state => state.firestore.ordered.comments);
+  const thread = useSelector(state => {
+    const { threads } = state.firestore.data;
+    return threads && threads[threadId];
+  });
+
+  const [activeThread, setActiveThread] = useState([]);
+  const [threadComments, setThreadComments] = useState(null);
 
   useEffect(() => {
     if (comments) {
@@ -20,20 +32,19 @@ const ThreadPage = ({ thread, comments, match, loggedUser }) => {
       );
       setThreadComments(filteredComments);
     }
-  }, [comments]);
+  }, [comments, threadId]);
 
   useEffect(() => {
     if (thread) setActiveThread(thread);
-  }, [threadId, pageType]);
+  }, [threadId, thread]);
 
   return (
     <>
-      {activeThread && comments && (
+      {activeThread && threadComments && (
         <ThreadTemplate
           pageType={pageType}
           threadId={threadId}
           comments={threadComments}
-          loggedUser={loggedUser}
           activeThread={activeThread}
         />
       )}
@@ -42,40 +53,11 @@ const ThreadPage = ({ thread, comments, match, loggedUser }) => {
 };
 
 ThreadPage.propTypes = {
-  thread: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  comments: PropTypes.arrayOf(PropTypes.object),
-  match: PropTypes.shape({
-    params: PropTypes.object,
-  }).isRequired,
-  loggedUser: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.bool,
-  ]).isRequired,
+  match: PropTypes.shape({ params: PropTypes.object }),
 };
 
 ThreadPage.defaultProps = {
-  thread: null,
-  comments: [],
+  match: undefined,
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const { id } = ownProps.match.params;
-  const { threads } = state.firestore.data;
-  const thread = threads ? threads[id] : null;
-
-  return {
-    thread,
-    comments: state.firestore.ordered.comments,
-    loggedUser: state.firebase.profile,
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect([{ collection: 'threads' }]),
-  firestoreConnect([
-    { collection: 'comments', orderBy: ['createdAt', 'desc'] },
-  ]),
-  firestoreConnect([{ collection: 'users' }]),
-)(ThreadPage);
+export default ThreadPage;

@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import UserPageTemplate from 'templates/UserPageTemplate';
 import Sidebar from 'components/organisms/Sidebar/Sidebar';
 import Header from 'components/organisms/Header/Header';
@@ -29,7 +30,8 @@ const StyledThreads = styled.div`
   margin-right: 20px;
 `;
 
-const ContentTemplate = ({ children, match, loggedUser, userId }) => {
+const ContentTemplate = ({ children, match, userId }) => {
+  const { username } = useSelector(state => state.firebase.profile);
   const pageType = useContext(PageContext);
   const [searchValue, setSearchValue] = useState('');
   const [activeTag, setActiveTag] = useState('All');
@@ -50,7 +52,7 @@ const ContentTemplate = ({ children, match, loggedUser, userId }) => {
           {isThreadsPage ? children : children([searchValue, activeTag])}
         </StyledThreads>
         {pageType === 'user' ? (
-          <UserProfileCard userId={userId} loggedUser={loggedUser} />
+          <UserProfileCard userId={userId} loggedUser={username} />
         ) : (
           <Sidebar activeTag={activeTag} setActiveTag={setActiveTag} />
         )}
@@ -64,13 +66,11 @@ ContentTemplate.propTypes = {
     path: PropTypes.string,
   }).isRequired,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.array]),
-  loggedUser: PropTypes.string,
   userId: PropTypes.string,
 };
 
 ContentTemplate.defaultProps = {
   children: null,
-  loggedUser: null,
   userId: null,
 };
 

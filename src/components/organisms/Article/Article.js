@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { removeElementAction } from 'store/actions';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeElementAction } from 'store/actions/threadsActions';
 import Modal from 'components/organisms/Modal/Modal';
 import UserWithText from 'components/molecules/UserWithText/UserWithText';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
@@ -38,14 +36,7 @@ const StyledFlexWrapper = styled.div`
   align-items: center;
 `;
 
-const Article = ({
-  users,
-  removeElement,
-  pageType,
-  loggedUser,
-  threadId,
-  activeThread,
-}) => {
+const Article = ({ pageType, loggedUser, threadId, activeThread }) => {
   const [redirect, setRedirect] = useState(false);
   const [isModalOpen, setModal] = useState(false);
 
@@ -60,6 +51,13 @@ const Article = ({
     maxSalary,
     authorId,
   } = activeThread;
+
+  const users = useSelector(state => state.firestore.data.users);
+  const dispatch = useDispatch();
+  const removeElement = useCallback(
+    (type, id) => dispatch(removeElementAction(type, id)),
+    [dispatch],
+  );
 
   const data = moment(createdAt.toDate()).calendar();
   const author = users && users[authorId];
@@ -146,8 +144,6 @@ const Article = ({
 };
 
 Article.propTypes = {
-  users: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  removeElement: PropTypes.func.isRequired,
   pageType: PropTypes.string.isRequired,
   threadId: PropTypes.string.isRequired,
   loggedUser: PropTypes.oneOfType([
@@ -169,7 +165,6 @@ Article.propTypes = {
 };
 
 Article.defaultProps = {
-  users: null,
   activeThread: PropTypes.shape({
     company: '',
     city: '',
@@ -179,7 +174,6 @@ Article.defaultProps = {
 };
 
 Article.defaultProps = {
-  users: null,
   activeThread: PropTypes.shape({
     company: '',
     city: '',
@@ -188,12 +182,4 @@ Article.defaultProps = {
   }),
 };
 
-const mapStateToProps = state => ({ users: state.firestore.data.users });
-const mapDispatchToProps = dispatch => ({
-  removeElement: (type, id) => dispatch(removeElementAction(type, id)),
-});
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect([{ collection: 'users' }]),
-)(Article);
+export default Article;

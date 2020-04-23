@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { useSelector, useDispatch } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import UserWithText from 'components/molecules/UserWithText/UserWithText';
 import Box from 'components/atoms/Box/Box';
 import Button from 'components/atoms/Button/Button';
-import { removeElementAction } from 'store/actions';
+import { removeElementAction } from 'store/actions/threadsActions';
 import moment from 'moment';
 
 const StyledWrapper = styled(Box)`
@@ -15,18 +14,18 @@ const StyledWrapper = styled(Box)`
   position: relative;
 `;
 
-const Comment = ({
-  users,
-  removeElement,
-  id,
-  authorId,
-  createdAt,
-  content,
-  loggedUser,
-}) => {
-  const author = users && users[authorId];
+const Comment = ({ id, authorId, createdAt, content, loggedUser }) => {
+  const dispatch = useDispatch();
+  useFirestoreConnect('users');
+  const users = useSelector(state => state.firestore.data.users);
+  const removeElement = useCallback(
+    (type, itemId) => dispatch(removeElementAction(type, itemId)),
+    [dispatch],
+  );
 
   const handleDelete = () => removeElement('comments', id);
+
+  const author = users && users[authorId];
   const data = moment(createdAt.toDate()).calendar();
 
   return (
@@ -52,11 +51,9 @@ const Comment = ({
 
 Comment.propTypes = {
   id: PropTypes.string.isRequired,
-  users: PropTypes.objectOf(PropTypes.object).isRequired,
   authorId: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   createdAt: PropTypes.objectOf(PropTypes.number).isRequired,
-  removeElement: PropTypes.func.isRequired,
   loggedUser: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object,
@@ -64,13 +61,4 @@ Comment.propTypes = {
   ]).isRequired,
 };
 
-const mapStateToProps = state => ({ users: state.firestore.data.users });
-
-const mapDispatchToProps = dispatch => ({
-  removeElement: (type, id) => dispatch(removeElementAction(type, id)),
-});
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect([{ collection: 'users' }]),
-)(Comment);
+export default Comment;

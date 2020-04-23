@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import AuthProvider from 'helpers/Auth';
 import GlobalStyle from 'theme/GlobalStyle';
 import { theme } from 'theme/mainTheme';
 import { PageContext } from 'context';
@@ -20,10 +19,8 @@ const MainTemplate = ({ children, location }) => {
 
   return (
     <PageContext.Provider value={pageType}>
-      <AuthProvider>
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
-      </AuthProvider>
+      <GlobalStyle />
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </PageContext.Provider>
   );
 };

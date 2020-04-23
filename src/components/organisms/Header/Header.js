@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Link, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Modal from 'components/organisms/Modal/Modal';
 import Heading from 'components/atoms/Heading/Heading';
 import Input from 'components/atoms/Input/Input';
-import { signOutAction } from 'store/actions';
+import { signOutAction } from 'store/actions/authActions';
 import { capitalize } from 'utils';
 
 const StyledWrapper = styled.header`
@@ -28,7 +28,7 @@ const StyledWrapper = styled.header`
   }
 `;
 
-const StyledHeading2 = styled(Heading)`
+const StyledHeading = styled(Heading)`
   font-size: ${({ theme }) => theme.fontSize.l};
   text-align: end;
   text-decoration: underline;
@@ -37,15 +37,11 @@ const StyledHeading2 = styled(Heading)`
   cursor: pointer;
 `;
 
-const Header = ({
-  match,
-  pageType,
-  isThreadPage,
-  signOut,
-  searchValue,
-  handleSearch,
-}) => {
+const Header = ({ pageType, isThreadPage, searchValue, handleSearch }) => {
+  const dispatch = useDispatch();
+  const signOut = useCallback(() => dispatch(signOutAction()), [dispatch]);
   const [isModalOpen, setModal] = useState(false);
+  const { id } = useParams();
 
   const handleSignout = () => {
     setModal(false);
@@ -58,10 +54,10 @@ const Header = ({
         <StyledWrapper>
           {pageType && (
             <>
-              <Heading big>Threads by {match.params.id}</Heading>
-              <StyledHeading2 onClick={() => setModal(true)}>
+              <Heading big>Threads by {id}</Heading>
+              <StyledHeading onClick={() => setModal(true)}>
                 Logout
-              </StyledHeading2>
+              </StyledHeading>
               {isModalOpen && (
                 <Modal
                   popout
@@ -78,9 +74,9 @@ const Header = ({
             <>
               <Heading big>{capitalize(pageType)}</Heading>
               {isThreadPage ? (
-                <StyledHeading2 as={Link} to={`/${pageType}`}>
+                <StyledHeading as={Link} to={`/${pageType}`}>
                   Back to {pageType}
-                </StyledHeading2>
+                </StyledHeading>
               ) : (
                 <Input
                   search
@@ -98,16 +94,10 @@ const Header = ({
 };
 
 Header.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-  }).isRequired,
   pageType: PropTypes.string,
   searchValue: PropTypes.string.isRequired,
   handleSearch: PropTypes.func.isRequired,
   isThreadPage: PropTypes.bool,
-  signOut: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {
@@ -115,8 +105,4 @@ Header.defaultProps = {
   isThreadPage: false,
 };
 
-const mapDispatchToProps = dispatch => ({
-  signOut: () => dispatch(signOutAction()),
-});
-
-export default connect(null, mapDispatchToProps)(withRouter(Header));
+export default Header;
