@@ -7,43 +7,37 @@ import { PageContext } from 'context';
 
 const ThreadPage = ({ match }) => {
   const pageType = useContext(PageContext);
-  const threadId = match.params.id;
+  const { id } = match.params;
 
-  useFirestoreConnect([
-    { collection: 'threads', where: ['id', '==', threadId] },
-  ]);
+  useFirestoreConnect([{ collection: 'threads', doc: id }]);
   useFirestoreConnect([
     { collection: 'comments', orderBy: ['createdAt', 'desc'] },
   ]);
-
+  const thread = useSelector(
+    state => state.firestore.data.threads && state.firestore.data.threads[id],
+  );
   const comments = useSelector(state => state.firestore.ordered.comments);
-  const thread = useSelector(state => {
-    const { threads } = state.firestore.data;
-    return threads && threads[threadId];
-  });
 
-  const [activeThread, setActiveThread] = useState([]);
-  const [threadComments, setThreadComments] = useState(null);
-
-  useEffect(() => {
-    if (comments) {
-      const filteredComments = comments.filter(
-        comment => comment.threadId.toString() === threadId.toString(),
-      );
-      setThreadComments(filteredComments);
-    }
-  }, [comments, threadId]);
+  const [activeThread, setActiveThread] = useState(null);
+  const [threadComments, setThreadComments] = useState([]);
 
   useEffect(() => {
     if (thread) setActiveThread(thread);
-  }, [threadId, thread]);
+  }, [thread, id]);
+
+  useEffect(() => {
+    const filteredComments =
+      comments &&
+      comments.filter(comment => comment.threadId.toString() === id.toString());
+    setThreadComments(filteredComments);
+  }, [comments, id]);
 
   return (
     <>
-      {activeThread && threadComments && (
+      {activeThread && (
         <ThreadTemplate
           pageType={pageType}
-          threadId={threadId}
+          threadId={id}
           comments={threadComments}
           activeThread={activeThread}
         />
@@ -53,11 +47,7 @@ const ThreadPage = ({ match }) => {
 };
 
 ThreadPage.propTypes = {
-  match: PropTypes.shape({ params: PropTypes.object }),
-};
-
-ThreadPage.defaultProps = {
-  match: undefined,
+  match: PropTypes.shape({ params: PropTypes.object }).isRequired,
 };
 
 export default ThreadPage;

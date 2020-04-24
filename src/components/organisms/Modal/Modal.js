@@ -57,7 +57,7 @@ const StyledButtonWrapper = styled.div`
   justify-content: space-evenly;
 `;
 
-const Modal = ({ setModal, popout, handleAction, userProfileInfo }) => {
+const Modal = ({ setModal, popout, action, handleAction, userProfileInfo }) => {
   const handleClose = e => {
     if (e.target !== e.currentTarget) return;
     setModal(false);
@@ -68,9 +68,7 @@ const Modal = ({ setModal, popout, handleAction, userProfileInfo }) => {
       <StyledModal popout={popout}>
         {popout ? (
           <>
-            <Heading bold="true">
-              Are you sure you want to {popouts[popout]}
-            </Heading>
+            <Heading bold>Are you sure you want to {popouts[action]}</Heading>
             <StyledButtonWrapper>
               <Button small onClick={handleAction}>
                 Yes
@@ -101,6 +99,7 @@ const Modal = ({ setModal, popout, handleAction, userProfileInfo }) => {
 Modal.propTypes = {
   setModal: PropTypes.func.isRequired,
   handleAction: PropTypes.func,
+  action: PropTypes.string,
   popout: PropTypes.bool,
   userProfileInfo: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
 };
@@ -108,6 +107,7 @@ Modal.propTypes = {
 Modal.defaultProps = {
   handleAction: null,
   popout: false,
+  action: '',
   userProfileInfo: false,
 };
 

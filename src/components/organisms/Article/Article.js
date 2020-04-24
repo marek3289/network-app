@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import { removeElementAction } from 'store/actions/threadsActions';
 import Modal from 'components/organisms/Modal/Modal';
 import UserWithText from 'components/molecules/UserWithText/UserWithText';
@@ -10,6 +11,7 @@ import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Heading from 'components/atoms/Heading/Heading';
 import Box from 'components/atoms/Box/Box';
 import Button from 'components/atoms/Button/Button';
+import Loader from 'components/atoms/Loader/Loader';
 import moment from 'moment';
 
 const StyledWrapper = styled(Box)`
@@ -39,6 +41,7 @@ const StyledFlexWrapper = styled.div`
 const Article = ({ pageType, loggedUser, threadId, activeThread }) => {
   const [redirect, setRedirect] = useState(false);
   const [isModalOpen, setModal] = useState(false);
+  const [author, setAuthor] = useState(null);
 
   const {
     title,
@@ -52,15 +55,22 @@ const Article = ({ pageType, loggedUser, threadId, activeThread }) => {
     authorId,
   } = activeThread;
 
-  const users = useSelector(state => state.firestore.data.users);
+  const data = moment(createdAt.toDate()).calendar();
+
+  useFirestoreConnect([{ collection: 'users', doc: authorId }]);
+  const users = useSelector(
+    state => state.firestore.data.users && state.firestore.data.users[authorId],
+  );
+
   const dispatch = useDispatch();
   const removeElement = useCallback(
     (type, id) => dispatch(removeElementAction(type, id)),
     [dispatch],
   );
 
-  const data = moment(createdAt.toDate()).calendar();
-  const author = users && users[authorId];
+  useEffect(() => {
+    if (users) setAuthor(users);
+  }, [users]);
 
   const handleDelete = () => {
     removeElement('threads', threadId);
@@ -73,7 +83,7 @@ const Article = ({ pageType, loggedUser, threadId, activeThread }) => {
 
   return (
     <>
-      {author && (
+      {author ? (
         <StyledWrapper as="article">
           {pageType === 'jobs' ? (
             <>
@@ -135,9 +145,16 @@ const Article = ({ pageType, loggedUser, threadId, activeThread }) => {
             </>
           )}
         </StyledWrapper>
+      ) : (
+        <Loader />
       )}
       {isModalOpen && (
-        <Modal popout handleAction={handleDelete} setModal={setModal} />
+        <Modal
+          popout
+          action="delete"
+          handleAction={handleDelete}
+          setModal={setModal}
+        />
       )}
     </>
   );

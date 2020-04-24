@@ -61,6 +61,7 @@ const Header = ({ pageType, isThreadPage, searchValue, handleSearch }) => {
               {isModalOpen && (
                 <Modal
                   popout
+                  action="logout"
                   setModal={setModal}
                   handleAction={handleSignout}
                 />
