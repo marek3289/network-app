@@ -62,12 +62,14 @@ const ContentPage = ({ match }) => {
         ))
       )}
       {isLoading && <Loader />}
-      <Pagination
-        postPerPage={5}
-        totalThreads={pageThreads && pageThreads.length}
-        currentPage={currentPage}
-        pageType={pageType}
-      />
+      {!isLoading && (
+        <Pagination
+          postPerPage={5}
+          totalThreads={pageThreads && pageThreads.length}
+          currentPage={currentPage}
+          pageType={pageType}
+        />
+      )}
     </ContentTemplate>
   );
 };
