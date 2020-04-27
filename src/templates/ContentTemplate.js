@@ -1,13 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserPageTemplate from 'templates/UserPageTemplate';
+import UserProfileCard from 'components/organisms/UserProfileCard/UserProfileCard';
 import Sidebar from 'components/organisms/Sidebar/Sidebar';
 import Header from 'components/organisms/Header/Header';
 import { PageContext } from 'context';
-import UserProfileCard from 'components/organisms/UserProfileCard/UserProfileCard';
 
 const StyledWrapper = styled.main`
   padding: 0 75px;
@@ -30,11 +30,17 @@ const StyledThreads = styled.div`
   margin-right: 20px;
 `;
 
-const ContentTemplate = ({ children, match, userId }) => {
+const ContentTemplate = ({
+  children,
+  match,
+  userId,
+  searchValue,
+  setSearchValue,
+  activeTag,
+  setActiveTag,
+}) => {
   const { username } = useSelector(state => state.firebase.profile);
   const pageType = useContext(PageContext);
-  const [searchValue, setSearchValue] = useState('');
-  const [activeTag, setActiveTag] = useState('All');
   const isThreadsPage = match.path.includes(':id');
 
   const handleSearch = e => setSearchValue(e.target.value);
@@ -48,9 +54,7 @@ const ContentTemplate = ({ children, match, userId }) => {
         handleSearch={handleSearch}
       />
       <StyledWrapper>
-        <StyledThreads>
-          {isThreadsPage ? children : children([searchValue, activeTag])}
-        </StyledThreads>
+        <StyledThreads>{children}</StyledThreads>
         {pageType === 'user' ? (
           <UserProfileCard userId={userId} loggedUser={username} />
         ) : (
@@ -67,11 +71,19 @@ ContentTemplate.propTypes = {
   }).isRequired,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.array]),
   userId: PropTypes.string,
+  searchValue: PropTypes.string,
+  activeTag: PropTypes.string,
+  setSearchValue: PropTypes.func,
+  setActiveTag: PropTypes.func,
 };
 
 ContentTemplate.defaultProps = {
   children: null,
   userId: null,
+  searchValue: '',
+  activeTag: 'All',
+  setSearchValue: null,
+  setActiveTag: null,
 };
 
 export default withRouter(ContentTemplate);

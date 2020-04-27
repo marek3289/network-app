@@ -68,7 +68,11 @@ const Sidebar = ({ activeTag, setActiveTag }) => {
 
 Sidebar.propTypes = {
   activeTag: PropTypes.string.isRequired,
-  setActiveTag: PropTypes.func.isRequired,
+  setActiveTag: PropTypes.func,
+};
+
+Sidebar.defaultProps = {
+  setActiveTag: null,
 };
 
 export default Sidebar;

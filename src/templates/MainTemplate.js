@@ -14,7 +14,7 @@ const MainTemplate = ({ children, location }) => {
     const { pathname } = location;
 
     const [currentPage] = pageTypes.filter(page => pathname.includes(page));
-    setPageType(currentPage);
+    if (currentPage !== undefined) setPageType(currentPage);
   }, [location]);
 
   return (

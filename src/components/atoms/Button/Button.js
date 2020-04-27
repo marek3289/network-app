@@ -39,7 +39,24 @@ const Button = styled.button`
       :active {
         box-shadow: -1px -1px 3px ${({ theme }) => theme.purple};
       }
-    `}}
+    `}
+
+  ${({ pagination }) =>
+    pagination &&
+    css`
+      width: 30px;
+      height: 30px;
+      background-color: ${({ theme }) => theme.white};
+      color: black;
+      box-shadow: 1px 1px 3px -2px ${({ theme }) => theme.black};
+
+      :hover {
+        box-shadow: 1px 1px 4px -2px ${({ theme }) => theme.black};
+      }
+      :active {
+        box-shadow: -1px -1px 3px -2px ${({ theme }) => theme.black};
+      }
+    `}
 `;
 
 export default Button;

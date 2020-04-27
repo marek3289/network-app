@@ -55,6 +55,11 @@ const Root = () => (
               />
               <ProtectedRoute
                 exact
+                path={routes.forumPage}
+                component={ContentPage}
+              />
+              <ProtectedRoute
+                exact
                 path={routes.forumThread}
                 component={ThreadPage}
               />
@@ -65,12 +70,22 @@ const Root = () => (
               />
               <ProtectedRoute
                 exact
+                path={routes.updatesPage}
+                component={ContentPage}
+              />
+              <ProtectedRoute
+                exact
                 path={routes.update}
                 component={ThreadPage}
               />
               <ProtectedRoute
                 exact
                 path={routes.jobs}
+                component={ContentPage}
+              />
+              <ProtectedRoute
+                exact
+                path={routes.jobsPage}
                 component={ContentPage}
               />
               <ProtectedRoute exact path={routes.job} component={ThreadPage} />

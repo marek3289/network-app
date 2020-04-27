@@ -1,10 +1,11 @@
 export const theme = {
   purple: 'hsl(229, 54%, 53%)',
+  white: 'hsl(0, 0%, 100%)',
+  black: 'hsl(0, 0%, 0%)',
 
   gray100: 'hsl(270, 6%, 94%)',
   gray150: 'hsl(206, 4%, 80%)',
   gray200: 'hsl(206, 4%, 64%)',
-
   borderRadius: '6px',
 
   light: 300,
