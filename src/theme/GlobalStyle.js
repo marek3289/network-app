@@ -17,6 +17,14 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Montserrat', sans-serif;
         overflow-y: scroll;
     }
+
+    button {
+        border-color: transparent;
+    }
+
+    button::-moz-focus-inner {
+        border: 0;
+    }
 `;
 
 export default GlobalStyle;
