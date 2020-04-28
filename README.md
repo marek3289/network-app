@@ -1,13 +1,10 @@
 <h2 align="center">Network-App</h2>
 
-<h4 align="center">
-Social Dev is my interpretation of social media app like Facebook, Twitter and Messenger. </h4>
-
-<p align="center">
+<h1 align="center">
   <a href="https://ibb.co/k8JWBL5">
     <img src="https://i.ibb.co/gTdB90m/network-app-screen.png" alt="network-app-screen" border="0">
   </a>
-</p>
+</h1>
 
 <br>
 
