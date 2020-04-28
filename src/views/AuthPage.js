@@ -43,6 +43,11 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const StyledParagraph = styled(Paragraph)`
+  text-align: center;
+  color: red;
+`;
+
 const AuthPage = ({ location }) => {
   const auth = useSelector(state => state.firebase.auth);
   const authError = useSelector(state => state.auth.authError);
@@ -117,7 +122,7 @@ const AuthPage = ({ location }) => {
         <StyledButton>
           {pageType === 'register' ? 'Sign Up' : 'Sign In'}
         </StyledButton>
-        {authError && <Paragraph>{authError}</Paragraph>}
+        {authError && <StyledParagraph>{authError}</StyledParagraph>}
       </StyledForm>
     </AuthTemplate>
   );
