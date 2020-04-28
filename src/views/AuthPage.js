@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import AuthTemplate from 'templates/AuthTemplate';
+import { Helmet } from 'react-helmet';
 import Input from 'components/atoms/Input/Input';
 import Button from 'components/atoms/Button/Button';
 import Heading from 'components/atoms/Heading/Heading';
@@ -85,6 +86,9 @@ const AuthPage = ({ location }) => {
 
   return (
     <AuthTemplate pageType={pageType}>
+      <Helmet>
+        <title>{heading[pageType]}</title>
+      </Helmet>
       <StyledHeading bold="true">{heading[pageType]}</StyledHeading>
       <StyledForm onSubmit={handleSubmit}>
         {pageType === 'register' && (
