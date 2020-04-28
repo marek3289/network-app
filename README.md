@@ -1,6 +1,8 @@
 <h2 align="center">Network-App</h2>
 
-[Imgur](https://i.imgur.com/YurwzPa.png?1)
+<p align="center">
+  <img src="https://imgur.com/YurwzPa"  alt="network-app">
+</p>
 
 <br>
 
