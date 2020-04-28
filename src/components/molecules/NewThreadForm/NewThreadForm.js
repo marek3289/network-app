@@ -62,7 +62,8 @@ const NewThreadForm = ({ setModal }) => {
   );
 
   const [pageType, setPageType] = useState(types.forum);
-  const [selectedTags, setselectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectInputError, setSelectInputError] = useState(false);
 
   const initialState = {
     tags: [],
@@ -92,15 +93,21 @@ const NewThreadForm = ({ setModal }) => {
   };
 
   const handleSelectChange = selectedOption => {
-    setselectedTags(selectedOption);
+    setSelectedTags(selectedOption);
+    setSelectInputError(false);
     if (!selectedOption) return;
     setInputContent({ tags: selectedOption.map(tag => tag.value) });
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    addThread(pageType, inputContent);
-    setModal(false);
+
+    if (!inputContent.tags.length) {
+      setSelectInputError(true);
+    } else {
+      addThread(pageType, inputContent);
+      setModal(false);
+    }
   };
 
   return (
@@ -195,6 +202,7 @@ const NewThreadForm = ({ setModal }) => {
             name="selected"
             selected={selectedTags}
             handleSelect={handleSelectChange}
+            error={selectInputError}
           />
         </StyledFormWrapper>
         <StyledButton small>add new item</StyledButton>

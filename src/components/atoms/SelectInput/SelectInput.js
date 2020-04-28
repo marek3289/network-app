@@ -30,14 +30,6 @@ const customStyles = {
   indicatorsContainer: provided => ({ ...provided, height: 35 }),
   placeholder: () => ({ fontSize: 12, color: 'hsl(206, 4%, 64%)' }),
   menuList: () => ({ fontSize: 12, height: 100, overflow: 'auto' }),
-  control: () => ({
-    height: 'auto',
-    background: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    border: '1px solid hsl(270, 6%, 94%)',
-    borderRadius: 5,
-  }),
   input: () => ({ height: 10, margin: 0, padding: 0 }),
   multiValue: provided => ({
     ...provided,
@@ -47,26 +39,53 @@ const customStyles = {
   }),
 };
 
-const SelectInput = ({ selected, handleSelect }) => (
-  <Select
-    value={selected}
-    onChange={handleSelect}
-    options={selected !== null && selected.length === 3 ? [] : options}
-    isMulti="true"
-    styles={customStyles}
-    isSearchable={false}
-    placeholder="Select tags (max 3)"
-    noOptionsMessage={() =>
-      selected.length === 3
-        ? "You've reached the max options value"
-        : 'No options available'
-    }
-  />
-);
+const control = {
+  height: 'auto',
+  background: 'white',
+  display: 'flex',
+  alignItems: 'center',
+  borderRadius: 5,
+};
+
+const customControl = {
+  control: () => ({
+    ...control,
+    border: '1px solid hsl(270, 6%, 94%)',
+  }),
+};
+
+const customControlError = {
+  control: () => ({
+    ...control,
+    border: '1px solid red',
+  }),
+};
+
+const SelectInput = ({ selected, handleSelect, error }) => {
+  const controlStyle = error ? customControlError : customControl;
+
+  return (
+    <Select
+      value={selected}
+      onChange={handleSelect}
+      options={selected !== null && selected.length === 3 ? [] : options}
+      isMulti="true"
+      styles={{ ...customStyles, ...controlStyle }}
+      isSearchable={false}
+      placeholder="Select tags (max 3)"
+      noOptionsMessage={() =>
+        selected.length === 3
+          ? "You've reached the max options value"
+          : 'No options available'
+      }
+    />
+  );
+};
 
 SelectInput.propTypes = {
   selected: PropTypes.arrayOf(PropTypes.object),
   handleSelect: PropTypes.func.isRequired,
+  error: PropTypes.bool.isRequired,
 };
 
 SelectInput.defaultProps = {
