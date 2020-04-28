@@ -1,10 +1,8 @@
 <h2 align="center">Network-App</h2>
 
-<h1 align="center">
-  <a href="https://ibb.co/k8JWBL5">
-    <img src="https://i.ibb.co/gTdB90m/network-app-screen.png" alt="network-app-screen" border="0">
-  </a>
-</h1>
+<p align="center">
+  <img src="https://i.ibb.co/gTdB90m/network-app-screen.png"  alt="network-app">
+</p>
 
 <br>
 
@@ -23,6 +21,8 @@ Network-App is a small forum application, created using React, Redux and Firebas
   <li>Login: test@test.com</li>
   <li>Password: test123</li>
 </ul>
+
+<br>
 
 ## Tech/framework used 🔧
 
